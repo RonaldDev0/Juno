@@ -1,14 +1,71 @@
 import { login, signup } from './actions'
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export default function LoginPage() {
   return (
-    <form>
-      <label htmlFor="email">Email:</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" required />
-      <button formAction={login}>Log in</button>
-      <button formAction={signup}>Sign up</button>
-    </form>
+    <main className='w-full h-screen flex flex-col justify-center items-center'>
+      <Card className='w-full max-w-sm'>
+        <CardHeader>
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+          <CardAction>
+            <Button
+              formAction={signup}
+              variant='secondary'
+            >
+              Sign up
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <div>
+              <div className='flex flex-col gap-6'>
+                <div className='grid gap-2'>
+                  <Label htmlFor='email'>Email</Label>
+                  <Input
+                    id='email'
+                    name='email'
+                    type='email'
+                    placeholder='m@example.com'
+                    required
+                  />
+                </div>
+                <div className='grid gap-2'>
+                  <div className='flex items-center'>
+                    <Label htmlFor='password'>Password</Label>
+                    <a
+                      href='#'
+                      className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
+                    >
+                      Forgot your password?
+                    </a>
+                  </div>
+                  <Input
+                    id='password'
+                    name='password'
+                    type='password'
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <Button
+            formAction={login}
+            className='w-full'
+          >
+            Log in
+          </Button>
+        </CardFooter>
+      </Card>
+    </main>
   )
 }
