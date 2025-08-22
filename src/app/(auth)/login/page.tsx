@@ -1,7 +1,6 @@
-import { login, signup } from './actions'
+import { login } from './actions'
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -11,21 +10,17 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Link from 'next/link'
 
 export default function LoginPage() {
   return (
     <main className='w-full h-screen flex flex-col justify-center items-center'>
       <Card className='w-full max-w-sm'>
-        <CardHeader>
+        <CardHeader className='text-center'>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
-          <CardAction>
-            <Button formAction={signup} variant='secondary'>
-              Sign up
-            </Button>
-          </CardAction>
         </CardHeader>
         <form className='space-y-6'>
           <CardContent className='space-y-6'>
@@ -42,12 +37,12 @@ export default function LoginPage() {
             <div className='grid gap-2'>
               <div className='flex items-center'>
                 <Label htmlFor='password'>Password</Label>
-                <a
-                  href='#'
-                  className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
+                <Link
+                  href='/forgot-password/send-email'
+                  className='ml-auto inline-block text-sm underline-offset-4 hover:underline opacity-70'
                 >
                   Forgot your password?
-                </a>
+                </Link>
               </div>
               <Input
                 id='password'
@@ -58,10 +53,13 @@ export default function LoginPage() {
             </div>
           </CardContent>
 
-          <CardFooter>
+          <CardFooter className='flex flex-col gap-3'>
             <Button formAction={login} className='w-full'>
               Log in
             </Button>
+            <Link href='/signup' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
+              Don't have an account yet?
+            </Link>
           </CardFooter>
         </form>
       </Card>
