@@ -23,5 +23,5 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <Toaster position='top-center' richColors />
       </body>
     </html>
-  );
+  )
 }
