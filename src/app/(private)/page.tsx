@@ -1,5 +1,3 @@
-import { signOut } from './actions'
-import { Button } from '@/components/ui/button'
 
 import { redirect } from 'next/navigation'
 
@@ -15,11 +13,8 @@ export default async function HomePage () {
   }
 
   return (
-    <main className='w-full h-screen flex flex-col gap-6 justify-center items-center'>
+    <main className='w-full h-[90dvh] flex flex-col gap-6 justify-center items-center'>
       <p>Hello {data.user.user_metadata.username} 🎉</p>
-      <form>
-        <Button formAction={signOut}>sign out</Button>
-      </form>
     </main>
   )
 }

@@ -12,7 +12,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'Juno',
-  description: 'La mejor :3',
+  description: 'App de agendamiento de citas para tu negocio',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
