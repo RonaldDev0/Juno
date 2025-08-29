@@ -18,8 +18,14 @@ export async function GET(request: NextRequest) {
       token_hash,
     })
     if (!error) {
-      // redirect user to specified redirect URL or root of app
-      redirect(next)
+      // Handle different verification types
+      if (type === 'recovery') {
+        // For password reset, redirect to reset password page
+        redirect('/reset-password')
+      } else {
+        // For email confirmation, redirect to specified URL or root
+        redirect(next)
+      }
     }
   }
 

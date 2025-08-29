@@ -1,6 +1,6 @@
 'use client'
 
-import { login } from './actions'
+import { forgotPassword } from './actions'
 import {
   Card,
   CardContent,
@@ -16,10 +16,15 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { useActionState, useEffect } from 'react'
 
-export default function LoginPage() {
-  const [state, formAction, isPending] = useActionState(login, { success: false, error: null })
+export default function ForgotPasswordPage() {
+  const [state, formAction, isPending] = useActionState(forgotPassword, { success: false, error: null })
 
   useEffect(() => {
+    if (state.success) {
+      toast.success('Reset email sent! 📧', {
+        description: 'Check your email and click the reset link to continue'
+      })
+    }
     if (state.error) toast.error(state.error)
   }, [state])
 
@@ -27,9 +32,9 @@ export default function LoginPage() {
     <main className='w-full h-screen flex flex-col justify-center items-center'>
       <Card className='w-full max-w-sm'>
         <CardHeader className='text-center'>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Forgot your password?</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email address and we'll send you a link to reset your password
           </CardDescription>
         </CardHeader>
         <form action={formAction} className='space-y-6'>
@@ -45,24 +50,6 @@ export default function LoginPage() {
                 defaultValue={state.values?.email}
               />
             </div>
-            <div className='grid gap-2'>
-              <div className='flex items-center'>
-                <Label htmlFor='password'>Password</Label>
-                <Link
-                  href='/forgot-password'
-                  className='ml-auto inline-block text-sm underline-offset-4 hover:underline opacity-70'
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id='password'
-                name='password'
-                type='password'
-                required
-                defaultValue={state.values?.password}
-              />
-            </div>
           </CardContent>
 
           <CardFooter className='flex flex-col gap-3'>
@@ -71,10 +58,10 @@ export default function LoginPage() {
               className='w-full'
               disabled={isPending}
             >
-              {isPending ? 'Logging in...' : 'Log in'}
+              {isPending ? 'Sending...' : 'Send reset link'}
             </Button>
-            <Link href='/signup' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
-              Don't have an account yet?
+            <Link href='/login' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
+              Back to login
             </Link>
           </CardFooter>
         </form>

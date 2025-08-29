@@ -1,6 +1,6 @@
 'use client'
 
-import { login } from './actions'
+import { resetPassword } from './actions'
 import {
   Card,
   CardContent,
@@ -12,12 +12,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import Link from 'next/link'
 import { toast } from 'sonner'
 import { useActionState, useEffect } from 'react'
 
-export default function LoginPage() {
-  const [state, formAction, isPending] = useActionState(login, { success: false, error: null })
+export default function ResetPasswordPage() {
+  const [state, formAction, isPending] = useActionState(resetPassword, { success: false, error: null })
 
   useEffect(() => {
     if (state.error) toast.error(state.error)
@@ -27,40 +26,33 @@ export default function LoginPage() {
     <main className='w-full h-screen flex flex-col justify-center items-center'>
       <Card className='w-full max-w-sm'>
         <CardHeader className='text-center'>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Reset your password</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your new password below
           </CardDescription>
         </CardHeader>
         <form action={formAction} className='space-y-6'>
           <CardContent className='space-y-6'>
             <div className='grid gap-2'>
-              <Label htmlFor='email'>Email</Label>
-              <Input
-                id='email'
-                name='email'
-                type='email'
-                placeholder='m@example.com'
-                required
-                defaultValue={state.values?.email}
-              />
-            </div>
-            <div className='grid gap-2'>
-              <div className='flex items-center'>
-                <Label htmlFor='password'>Password</Label>
-                <Link
-                  href='/forgot-password'
-                  className='ml-auto inline-block text-sm underline-offset-4 hover:underline opacity-70'
-                >
-                  Forgot your password?
-                </Link>
-              </div>
+              <Label htmlFor='password'>New Password</Label>
               <Input
                 id='password'
                 name='password'
                 type='password'
+                placeholder='Enter new password'
                 required
                 defaultValue={state.values?.password}
+              />
+            </div>
+            <div className='grid gap-2'>
+              <Label htmlFor='confirmPassword'>Confirm New Password</Label>
+              <Input
+                id='confirmPassword'
+                name='confirmPassword'
+                type='password'
+                placeholder='Confirm new password'
+                required
+                defaultValue={state.values?.confirmPassword}
               />
             </div>
           </CardContent>
@@ -71,11 +63,8 @@ export default function LoginPage() {
               className='w-full'
               disabled={isPending}
             >
-              {isPending ? 'Logging in...' : 'Log in'}
+              {isPending ? 'Resetting...' : 'Reset password'}
             </Button>
-            <Link href='/signup' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
-              Don't have an account yet?
-            </Link>
           </CardFooter>
         </form>
       </Card>

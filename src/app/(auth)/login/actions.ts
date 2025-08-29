@@ -1,15 +1,20 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-import { createClient } from '@/lib/supabase/server'
+type LoginState = {
+  success: boolean,
+  error?: string | null,
+  values?: {
+    email?: string,
+    password?: string,
+  }
+}
 
-export async function login(formData: FormData) {
+export async function login(_prevState: LoginState, formData: FormData): Promise<LoginState> {
   const supabase = await createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
@@ -18,9 +23,15 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect('/error')
+    return {
+      success: false,
+      error: error.message,
+      values: {
+        email: data.email,
+        password: data.password,
+      }
+    }
   }
 
-  revalidatePath('/', 'layout')
   redirect('/')
 }
