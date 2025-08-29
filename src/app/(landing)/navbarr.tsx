@@ -22,7 +22,8 @@ const links: ILink[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/' },
   { label: 'Services', href: '/' },
-  { label: 'Contact', href: '/' }
+  { label: 'Contact', href: '/' },
+  { label: 'Dashboard', href: '/' }
 ]
 
 export function Navbar() {
