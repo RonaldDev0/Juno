@@ -19,10 +19,10 @@ type ILink = {
 }
 
 const links: ILink[] = [
-  { label: 'Inicio', href: '/' },
-  { label: 'Nosotros', href: '/' },
-  { label: 'Servicios', href: '/' },
-  { label: 'Contacto', href: '/' }
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/' },
+  { label: 'Services', href: '/' },
+  { label: 'Contact', href: '/' }
 ]
 
 export function Navbar() {
@@ -54,9 +54,9 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side='left' className='w-64'>
-              <SheetTitle className='sr-only'>Menú de navegación</SheetTitle>
+              <SheetTitle className='sr-only'>Navigation menu</SheetTitle>
               <SheetDescription className='sr-only'>
-                Opciones principales de navegación
+                Main navigation options
               </SheetDescription>
               <nav className='flex flex-col items-center h-full gap-4 mt-14'>
                 {links.map(({ label, href }) => (

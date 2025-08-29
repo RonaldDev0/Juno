@@ -71,14 +71,14 @@ export function Navbar() {
               <DropdownMenuLabel>{user?.user_metadata?.username}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href='/perfil'>Perfil</Link>
+                <Link href='/profile'>Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href='/configuracion'>Configuración</Link>
+                <Link href='/settings'>Settings</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout} variant='destructive'>
-                Cerrar sesión
+                Log out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -93,9 +93,9 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side='left' className='w-64'>
-              <SheetTitle className='sr-only'>Menú de navegación</SheetTitle>
+              <SheetTitle className='sr-only'>Navigation menu</SheetTitle>
               <SheetDescription className='sr-only'>
-                Opciones principales de navegación
+                Main navigation options
               </SheetDescription>
 
               <div className='flex flex-col items-center mt-10 gap-6'>
@@ -107,13 +107,13 @@ export function Navbar() {
                 </Avatar>
                 <nav className='flex flex-col gap-4 w-full px-4'>
                   <Button variant='ghost' asChild>
-                    <Link href='/perfil'>Perfil</Link>
+                    <Link href='/profile'>Profile</Link>
                   </Button>
                   <Button variant='ghost' asChild>
-                    <Link href='/configuracion'>Configuración</Link>
+                    <Link href='/settings'>Settings</Link>
                   </Button>
                   <Button variant='destructive' onClick={handleLogout}>
-                    Cerrar sesión
+                    Log out
                   </Button>
                 </nav>
               </div>
