@@ -32,10 +32,10 @@ export default function SignupPage() {
     <main className='w-full h-screen flex flex-col justify-center items-center'>
       <Card className='w-full max-w-sm'>
         <CardHeader className='text-center'>
-          <CardTitle>Create an account</CardTitle>
-          <CardDescription>
-            Enter your details to create an account
-          </CardDescription>
+          <div className='mb-2'>
+            <h1 className='text-2xl font-bold text-primary'>Juno</h1>
+          </div>
+          <CardTitle>Create account</CardTitle>
         </CardHeader>
         <form action={formAction} className='space-y-6'>
           <CardContent className='space-y-6'>

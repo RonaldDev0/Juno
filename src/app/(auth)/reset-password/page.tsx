@@ -26,10 +26,10 @@ export default function ResetPasswordPage() {
     <main className='w-full h-screen flex flex-col justify-center items-center'>
       <Card className='w-full max-w-sm'>
         <CardHeader className='text-center'>
-          <CardTitle>Reset your password</CardTitle>
-          <CardDescription>
-            Enter your new password below
-          </CardDescription>
+          <div className='mb-2'>
+            <h1 className='text-2xl font-bold text-primary'>Juno</h1>
+          </div>
+          <CardTitle>New password</CardTitle>
         </CardHeader>
         <form action={formAction} className='space-y-6'>
           <CardContent className='space-y-6'>

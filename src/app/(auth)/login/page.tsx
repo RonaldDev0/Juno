@@ -27,10 +27,10 @@ export default function LoginPage() {
     <main className='w-full h-screen flex flex-col justify-center items-center'>
       <Card className='w-full max-w-sm'>
         <CardHeader className='text-center'>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
+          <div className='mb-2'>
+            <h1 className='text-2xl font-bold text-primary'>Juno</h1>
+          </div>
+          <CardTitle>Welcome back</CardTitle>
         </CardHeader>
         <form action={formAction} className='space-y-6'>
           <CardContent className='space-y-6'>
