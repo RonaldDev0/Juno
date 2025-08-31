@@ -23,7 +23,7 @@ const centerLinks: ILink[] = [
 ]
 
 const rightLinks: ILink[] = [
-  { label: 'Start Free Trial', href: '/' }
+  { label: 'Start Free Trial', href: '/login' }
 ]
 
 export function Navbar() {
