@@ -1,8 +1,8 @@
 'use client'
 
+import { logout } from './actions'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useActionState } from 'react'
 import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,12 +22,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { createClient } from '@/lib/supabase/client'
+import { toast } from 'sonner'
 
 export function Navbar() {
-  const router = useRouter()
   const supabase = createClient()
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [logoutState, logoutAction, isPending] = useActionState(logout, { success: false })
 
   useEffect(() => {
     const getUser = async () => {
@@ -43,11 +44,11 @@ export function Navbar() {
     return () => subscription.subscription.unsubscribe()
   }, [supabase])
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
-    router.push('/login')
-  }
+  useEffect(() => {
+    if (logoutState.error) {
+      toast.error(logoutState.error)
+    }
+  }, [logoutState])
 
   return (
     <nav className='w-full border-b bg-background'>
@@ -77,9 +78,18 @@ export function Navbar() {
                 <Link href='/settings'>Settings</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} variant='destructive'>
-                Log out
-              </DropdownMenuItem>
+              <form action={logoutAction}>
+                <DropdownMenuItem asChild>
+                  <Button
+                    type='submit'
+                    variant='ghost'
+                    className='w-full justify-start text-destructive cursor-pointer h-auto p-2'
+                    disabled={isPending}
+                  >
+                    {isPending ? 'Logging out...' : 'Log out'}
+                  </Button>
+                </DropdownMenuItem>
+              </form>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -107,14 +117,22 @@ export function Navbar() {
                 </Avatar>
                 <nav className='flex flex-col gap-4 w-full px-4'>
                   <Button variant='ghost' asChild>
-                    <Link href='/profile'>Profile</Link>
+                    <Link href='/profile' onClick={() => setOpen(false)}>Profile</Link>
                   </Button>
                   <Button variant='ghost' asChild>
-                    <Link href='/settings'>Settings</Link>
+                    <Link href='/settings' onClick={() => setOpen(false)}>Settings</Link>
                   </Button>
-                  <Button variant='destructive' onClick={handleLogout}>
-                    Log out
-                  </Button>
+                  <form action={logoutAction} className='w-full'>
+                    <Button 
+                      type='submit'
+                      variant='destructive' 
+                      className='w-full'
+                      disabled={isPending}
+                      onClick={() => setOpen(false)}
+                    >
+                      {isPending ? 'Logging out...' : 'Log out'}
+                    </Button>
+                  </form>
                 </nav>
               </div>
             </SheetContent>

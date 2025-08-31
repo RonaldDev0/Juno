@@ -35,17 +35,17 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse
   }
 
-  // Unauthenticated users: handle redirects
+  // Unauthenticated users: handle URL rewrite for home page
   if (pathname === '/') {
     const referer = request.headers.get('referer')
-    // Only redirect if coming from outside the site
+    // Only rewrite if coming from outside the site
     if (!referer || !referer.includes(request.nextUrl.origin)) {
-      return NextResponse.redirect(new URL('/landing', request.url))
+      return NextResponse.rewrite(new URL('/landing', request.url))
     }
   }
 
   // Redirect to login for protected routes
-  const publicRoutes = ['/login', '/signup', '/forgot-password', '/auth', '/landing']
+  const publicRoutes = ['/login', '/signup', '/forgot-password', '/landing', '/pricing', '/use-cases']
   if (!publicRoutes.some(path => pathname.startsWith(path))) {
     return NextResponse.redirect(new URL('/login', request.url))
   }

@@ -4,7 +4,6 @@ import { forgotPassword } from './actions'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle

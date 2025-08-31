@@ -4,7 +4,6 @@ import { signup } from './actions'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle
