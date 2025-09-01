@@ -7,8 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const token_hash = searchParams.get('token_hash')
-  const type = searchParams.get('type') as EmailOtpType | null
-  const next = searchParams.get('next') ?? '/'
+  const type = searchParams.get('type') as EmailOtpType
 
   if (token_hash && type) {
     const supabase = await createClient()
@@ -24,7 +23,7 @@ export async function GET(request: NextRequest) {
         redirect('/reset-password')
       } else {
         // For email confirmation, redirect to specified URL or root
-        redirect(next)
+        redirect('/home')
       }
     }
   }
