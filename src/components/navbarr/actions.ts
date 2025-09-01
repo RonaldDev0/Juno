@@ -20,5 +20,5 @@ export async function logout(_prevState: LogoutState): Promise<LogoutState> {
     }
   }
 
-  redirect('/landing')
+  redirect('/')
 }

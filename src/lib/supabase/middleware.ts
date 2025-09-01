@@ -26,28 +26,20 @@ export async function updateSession(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  // Early returns for better performance and readability
-  if (user) {
-    // Authenticated users: redirect from auth pages to home
-    if (['/login', '/signup', '/forgot-password'].some(path => pathname.startsWith(path))) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
-    return supabaseResponse
-  }
+  // Define public routes
+  const publicRoutes = ['/', '/login', '/signup', '/forgot-password', '/pricing', '/use-cases']
+  const isPublicRoute = publicRoutes.some(route => 
+    route === '/' ? pathname === '/' : pathname === route || pathname.startsWith(route + '/')
+  )
 
-  // Unauthenticated users: handle URL rewrite for home page
-  if (pathname === '/') {
-    const referer = request.headers.get('referer')
-    // Only rewrite if coming from outside the site
-    if (!referer || !referer.includes(request.nextUrl.origin)) {
-      return NextResponse.rewrite(new URL('/landing', request.url))
-    }
-  }
-
-  // Redirect to login for protected routes
-  const publicRoutes = ['/login', '/signup', '/forgot-password', '/landing', '/pricing', '/use-cases']
-  if (!publicRoutes.some(path => pathname.startsWith(path))) {
+  // Block unauthenticated users from protected routes
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (user && ['/login', '/signup', '/forgot-password'].some(path => pathname.startsWith(path))) {
+    return NextResponse.redirect(new URL('/home', request.url))
   }
 
   return supabaseResponse

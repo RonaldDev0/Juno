@@ -23,7 +23,7 @@ const centerLinks: ILink[] = [
 ]
 
 const rightLinks: ILink[] = [
-  { label: 'Start Free Trial', href: '/login' }
+  { label: 'Sign in', href: '/login' }
 ]
 
 export function Navbar() {
@@ -34,7 +34,7 @@ export function Navbar() {
       <nav className='fixed top-0 left-0 z-50 w-full border-b bg-background'>
         <div className='container mx-auto flex h-16 items-center justify-between px-4'>
           {/* Logo - Left */}
-          <Link href='/landing' className='text-3xl font-bold'>
+          <Link href='/' className='text-3xl font-bold'>
             Juno
           </Link>
 
