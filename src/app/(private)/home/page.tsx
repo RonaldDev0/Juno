@@ -1,9 +1,7 @@
-
 import { redirect } from 'next/navigation'
-
 import { createClient } from '@/lib/supabase/server'
 
-export default async function HomePage () {
+export default async function HomePage() {
   const supabase = await createClient()
 
   const { data, error } = await supabase.auth.getUser()
@@ -13,8 +11,16 @@ export default async function HomePage () {
   }
 
   return (
-    <main className='w-full h-[90dvh] flex flex-col gap-6 justify-center items-center'>
-      <p>Hello {data.user.user_metadata.username} 🎉</p>
-    </main>
+    <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
+      <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
+        <div className='bg-muted/50 aspect-video rounded-xl' />
+        <div className='bg-muted/50 aspect-video rounded-xl' />
+        <div className='bg-muted/50 aspect-video rounded-xl' />
+      </div>
+      <div className='bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min flex justify-center items-center'>
+        <p>Hello {data.user.user_metadata.username} 🎉</p>
+      </div>
+    </div>
+    
   )
 }
