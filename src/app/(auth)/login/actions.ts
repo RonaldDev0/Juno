@@ -35,3 +35,17 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
 
   redirect('/home')
 }
+
+export async function loginWithGoogle() {
+  const supabase = await createClient()
+
+  const { data } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE}/auth/callback`,
+    },
+  })
+  if (data.url) {
+    redirect(data.url)
+  }
+}

@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { useActionState, useEffect } from 'react'
+import Link from 'next/link'
 
 export default function ResetPasswordPage() {
   const [state, formAction, isPending] = useActionState(resetPassword, { success: false, error: null })
@@ -64,6 +65,11 @@ export default function ResetPasswordPage() {
             >
               {isPending ? 'Resetting...' : 'Reset password'}
             </Button>
+            <div className='w-full text-center text-sm opacity-70'>
+              <Link href='/login' className='underline-offset-4 hover:underline'>
+                Back to login
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>

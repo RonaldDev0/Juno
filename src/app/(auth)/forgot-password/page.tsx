@@ -59,9 +59,12 @@ export default function ForgotPasswordPage() {
             >
               {isPending ? 'Sending...' : 'Send reset link'}
             </Button>
-            <Link href='/login' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
-              Back to login
-            </Link>
+            <div className='w-full text-center text-sm opacity-70'>
+              Remember your password?{' '}
+              <Link href='/login' className='underline-offset-4 hover:underline'>
+                Sign in
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>

@@ -1,6 +1,6 @@
 'use client'
 
-import { login } from './actions'
+import { login, loginWithGoogle } from './actions'
 import {
   Card,
   CardContent,
@@ -13,14 +13,21 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { useActionState, useEffect } from 'react'
+import { useActionState, useEffect, useTransition } from 'react'
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(login, { success: false, error: null })
+  const [isGooglePending, startGoogleTransition] = useTransition()
 
   useEffect(() => {
     if (state.error) toast.error(state.error)
   }, [state])
+
+  const handleGoogleLogin = () => {
+    startGoogleTransition(() => {
+      loginWithGoogle()
+    })
+  }
 
   return (
     <main className='w-full h-screen flex flex-col justify-center items-center'>
@@ -63,18 +70,29 @@ export default function LoginPage() {
               />
             </div>
           </CardContent>
-
           <CardFooter className='flex flex-col gap-3'>
             <Button
               type='submit'
               className='w-full'
               disabled={isPending}
             >
-              {isPending ? 'Logging in...' : 'Log in'}
+              {isPending ? 'Logging in...' : 'Login'}
             </Button>
-            <Link href='/signup' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
-              Don't have an account yet?
-            </Link>
+            <Button
+              type='button'
+              variant='outline'
+              className='w-full'
+              disabled={isPending || isGooglePending}
+              onClick={handleGoogleLogin}
+            >
+              {isGooglePending ? 'Connecting to Google...' : 'Login with Google'}
+            </Button>
+            <div className='w-full text-center text-sm opacity-70'>
+              Don't have an account?{' '}
+              <Link href='/signup' className='underline-offset-4 hover:underline'>
+                Sign up
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>

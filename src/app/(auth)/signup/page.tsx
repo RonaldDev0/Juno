@@ -90,9 +90,12 @@ export default function SignupPage() {
             >
               {isPending ? 'Creating...' : 'Sign up'}
             </Button>
-            <Link href='/login' className='w-full text-center text-sm opacity-70 underline-offset-4 hover:underline'>
-              Do you already have an account?
-            </Link>
+            <div className='w-full text-center text-sm opacity-70'>
+              Already have an account?{' '}
+              <Link href='/login' className='underline-offset-4 hover:underline'>
+                Sign in
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>
