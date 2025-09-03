@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/sidebar'
 import Opt from './opt'
 import Link from 'next/link'
+import FooterSkeleton from './footer-skeleton'
 
 export default function Footer() {
   const { isMobile, state } = useSidebar()
@@ -62,13 +63,7 @@ export default function Footer() {
   }, [])
 
   if (loading) {
-    return (
-      <SidebarFooter>
-        <div className="flex items-center justify-center p-4">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-        </div>
-      </SidebarFooter>
-    )
+    return <FooterSkeleton />
   }
 
   if (!user) return null
