@@ -29,6 +29,15 @@ export async function updateSession(request: NextRequest) {
   const publicRoutes = ['/login', '/signup', '/forgot-password', '/auth/confirm', '/auth/callback', '/pricing', '/use-cases']
   const isPublicRoute = pathname === '/' || publicRoutes.some(route => pathname.startsWith(route))
 
+  if (pathname === '/' && request.nextUrl.searchParams.has('code')) {
+    const code = request.nextUrl.searchParams.get('code') as string
+    const callback = new URL('/auth/callback', request.url)
+    callback.searchParams.set('code', code)
+    callback.searchParams.set('next', '/home')
+
+    return NextResponse.redirect(callback)
+  }
+
   // Block unauthenticated users from protected routes
   if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL('/login', request.url))
