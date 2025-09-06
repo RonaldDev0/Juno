@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Check, Star, ArrowRight } from 'lucide-react'
 import { usePlans } from '@/hooks/use-plans'
 
@@ -16,20 +17,22 @@ export default function Pricing() {
     return (
       <div className='grid md:grid-cols-3 gap-8 mb-16'>
         {[1, 2, 3].map(i => (
-          <Card key={i} className='relative border-0 shadow-lg'>
+          <Card key={i} className='relative border-0 shadow-lg flex flex-col h-full'>
             <CardHeader className='text-center pt-8'>
-              <div className='animate-pulse'>
-                <div className='h-8 bg-gray-200 rounded mb-2'></div>
-                <div className='h-4 bg-gray-200 rounded mb-4'></div>
-                <div className='h-12 bg-gray-200 rounded'></div>
-              </div>
+              <Skeleton className='h-8 w-24 mx-auto mb-2' />
+              <Skeleton className='h-4 w-32 mx-auto mb-4' />
+              <Skeleton className='h-12 w-20 mx-auto' />
             </CardHeader>
-            <CardContent className='space-y-4'>
-              <div className='animate-pulse space-y-3'>
+            <CardContent className='space-y-4 flex flex-col flex-grow'>
+              <div className='space-y-3 flex-grow'>
                 {[1, 2, 3, 4, 5].map(j => (
-                  <div key={j} className='h-4 bg-gray-200 rounded'></div>
+                  <div key={j} className='flex items-center gap-3'>
+                    <Skeleton className='h-5 w-5 rounded-full' />
+                    <Skeleton className='h-4 flex-1' />
+                  </div>
                 ))}
               </div>
+              <Skeleton className='h-12 w-full mt-6' />
             </CardContent>
           </Card>
         ))}
@@ -51,17 +54,26 @@ export default function Pricing() {
 
   return (
     <>
-      {/* Billing Toggle - Shadcn Buttons */}
+      {/* Billing Toggle - Sliding Background */}
       <div className='flex flex-col items-center space-y-4 mb-12'>
-        <div className='relative bg-muted/30 rounded-full p-1 border border-border/50'>
-          <div className='flex items-center space-x-1'>
+        <div className='relative bg-muted/30 rounded-full p-1.5 border border-border/50'>
+          {/* Sliding background */}
+          <div 
+            className={`absolute top-1 bottom-1 bg-background rounded-full shadow-sm border border-border/50 transition-all duration-300 ease-in-out ${
+              billingCycle === 'monthly' 
+                ? 'left-1 w-[calc(50%-2px)]' 
+                : 'left-[calc(50%+1px)] w-[calc(50%-2px)]'
+            }`}
+          />
+          
+          <div className='relative flex items-center space-x-1'>
             <Button
               onClick={() => setBillingCycle('monthly')}
               variant='ghost'
-              size='sm'
-              className={`rounded-full ${
+              size='default'
+              className={`rounded-full px-6 py-2 relative z-10 transition-colors duration-300 ${
                 billingCycle === 'monthly'
-                  ? 'bg-background text-foreground shadow-sm border border-border/50 hover:bg-background hover:text-foreground'
+                  ? 'text-foreground hover:text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -71,16 +83,16 @@ export default function Pricing() {
               <Button
                 onClick={() => setBillingCycle('yearly')}
                 variant='ghost'
-                size='sm'
-                className={`rounded-full ${
+                size='default'
+                className={`rounded-full px-6 py-2 relative z-10 transition-colors duration-300 ${
                   billingCycle === 'yearly'
-                    ? 'bg-background text-foreground shadow-sm border border-border/50 hover:bg-background hover:text-foreground'
+                    ? 'text-foreground hover:text-foreground'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 Yearly
               </Button>
-              <div className='absolute -top-3 -right-3 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-bold z-10'>
+              <div className='absolute -top-3 -right-3 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-bold z-20'>
                 17% off
               </div>
             </div>

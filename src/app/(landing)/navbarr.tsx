@@ -18,7 +18,6 @@ type ILink = {
 }
 
 const centerLinks: ILink[] = [
-  { label: 'Use Cases', href: '/use-cases' },
   { label: 'Pricing', href: '/pricing' }
 ]
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Navbar } from './navbarr'
+import CTA from './components/cta'
 
 export default function LandingLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -8,6 +9,7 @@ export default function LandingLayout({ children }: Readonly<{ children: ReactNo
       <div>
         {children}
       </div>
+      <CTA />
     </div>
   )
 }
