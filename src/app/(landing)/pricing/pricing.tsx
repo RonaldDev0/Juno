@@ -1,126 +1,161 @@
-import Link from 'next/link'
+'use client'
+
+import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Check, Star, ArrowRight } from 'lucide-react'
-
-const plans = [
-  {
-    name: 'Starter',
-    price: 'Free',
-    description: 'Perfect for startups and small teams',
-    features: [
-      'Up to 5 users',
-      'Basic automation workflows',
-      'Email support',
-      '10GB storage',
-      'Basic analytics',
-      '5 integrations'
-    ],
-    cta: 'Start free',
-    href: '/',
-    popular: false,
-    savings: '$5K/year',
-    example: 'Used by 500+ startups like Airbnb in early days'
-  },
-  {
-    name: 'Pro',
-    price: '$99',
-    period: '/month',
-    description: 'Ideal for growing companies',
-    features: [
-      'Up to 50 users',
-      'Advanced automation',
-      'Priority support',
-      '100GB storage',
-      'Advanced analytics',
-      'Unlimited integrations',
-      'Custom workflows',
-      'API access'
-    ],
-    cta: 'Start free trial',
-    href: '/',
-    popular: true,
-    savings: '$50K/year',
-    example: 'Microsoft saved $2.1B annually with Pro plan'
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    description: 'For Fortune 500 companies',
-    features: [
-      'Unlimited users',
-      'Custom automation',
-      '24/7 dedicated support',
-      'Unlimited storage',
-      'Custom API & integrations',
-      'Guaranteed SLA',
-      'Dedicated account manager',
-      'Custom reporting',
-      'Advanced security'
-    ],
-    cta: 'Contact sales',
-    href: '/',
-    popular: false,
-    savings: '$500K+/year',
-    example: 'Meta achieved 340% ROI with Enterprise plan'
-  }
-]
+import { usePlans } from '@/hooks/use-plans'
 
 
 export default function Pricing() {
+  const { plans, loading, error } = usePlans()
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
+
+  // Loading state with skeleton
+  if (loading) {
+    return (
+      <div className='grid md:grid-cols-3 gap-8 mb-16'>
+        {[1, 2, 3].map(i => (
+          <Card key={i} className='relative border-0 shadow-lg'>
+            <CardHeader className='text-center pt-8'>
+              <div className='animate-pulse'>
+                <div className='h-8 bg-gray-200 rounded mb-2'></div>
+                <div className='h-4 bg-gray-200 rounded mb-4'></div>
+                <div className='h-12 bg-gray-200 rounded'></div>
+              </div>
+            </CardHeader>
+            <CardContent className='space-y-4'>
+              <div className='animate-pulse space-y-3'>
+                {[1, 2, 3, 4, 5].map(j => (
+                  <div key={j} className='h-4 bg-gray-200 rounded'></div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    )
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className='text-center py-8'>
+        <p className='text-red-600 mb-4'>Error loading pricing plans</p>
+        <Button onClick={() => window.location.reload()}>
+          Try Again
+        </Button>
+      </div>
+    )
+  }
+
   return (
-    <div className='grid md:grid-cols-3 gap-8 mb-16'>
-      {plans.map(plan => (
-        <Card
-          key={plan.name}
-          className={`relative border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${plan.popular ? 'ring-2 ring-primary scale-105' : ''
-            }`}
-        >
-          {plan.popular && (
-            <div className='absolute -top-4 left-1/2 transform -translate-x-1/2'>
-              <div className='bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2'>
-                <Star className='h-4 w-4' />
-                Most popular
+    <>
+      {/* Billing Toggle - Shadcn Buttons */}
+      <div className='flex flex-col items-center space-y-4 mb-12'>
+        <div className='relative bg-muted/30 rounded-full p-1 border border-border/50'>
+          <div className='flex items-center space-x-1'>
+            <Button
+              onClick={() => setBillingCycle('monthly')}
+              variant='ghost'
+              size='sm'
+              className={`rounded-full ${
+                billingCycle === 'monthly'
+                  ? 'bg-background text-foreground shadow-sm border border-border/50 hover:bg-background hover:text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Monthly
+            </Button>
+            <div className='relative'>
+              <Button
+                onClick={() => setBillingCycle('yearly')}
+                variant='ghost'
+                size='sm'
+                className={`rounded-full ${
+                  billingCycle === 'yearly'
+                    ? 'bg-background text-foreground shadow-sm border border-border/50 hover:bg-background hover:text-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Yearly
+              </Button>
+              <div className='absolute -top-3 -right-3 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-bold z-10'>
+                17% off
               </div>
             </div>
-          )}
+          </div>
+        </div>
+      </div>
 
-          <CardHeader className='text-center pt-8'>
-            <CardTitle className='text-2xl'>{plan.name}</CardTitle>
-            <CardDescription className='text-base'>{plan.description}</CardDescription>
-            <div className='mt-4'>
-              <span className='text-4xl font-bold'>{plan.price}</span>
-              {plan.period && (
-                <span className='text-muted-foreground ml-1'>{plan.period}</span>
+      <div className='grid md:grid-cols-3 gap-8 mb-16'>
+        {plans.map(plan => {
+          const currentPricing = billingCycle === 'monthly' ? plan.pricing.monthly : plan.pricing.yearly
+          const savings = billingCycle === 'yearly' ? plan.pricing.yearly.savings_percentage : 0
+          const hasSavings = savings && savings > 0
+          
+          // Calculate USD savings for yearly billing
+          const monthlyYearlyTotal = plan.pricing.monthly.price_cents * 12
+          const yearlyPrice = plan.pricing.yearly.price_cents
+          const usdSavings = billingCycle === 'yearly' ? (monthlyYearlyTotal - yearlyPrice) / 100 : 0
+
+          return (
+            <Card
+              key={plan.id}
+              className={`relative border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full ${plan.is_popular ? 'ring-2 ring-primary scale-105' : ''
+                }`}
+            >
+              {plan.is_popular && (
+                <div className='absolute -top-4 left-1/2 transform -translate-x-1/2'>
+                  <div className='bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2'>
+                    <Star className='h-4 w-4' />
+                    Most popular
+                  </div>
+                </div>
               )}
-            </div>
-            <div className='text-sm text-green-600 font-medium mt-2'>
-              Save {plan.savings}
-            </div>
-            <div className='text-xs text-muted-foreground mt-1'>
-              {plan.example}
-            </div>
-          </CardHeader>
 
-          <CardContent className='space-y-4'>
-            <ul className='space-y-3'>
-              {plan.features.map(feature => (
-                <li key={feature} className='flex items-center gap-3'>
-                  <Check className='h-5 w-5 text-green-500 flex-shrink-0' />
-                  <span className='text-sm'>{feature}</span>
-                </li>
-              ))}
-            </ul>
+              <CardHeader className='text-center pt-8'>
+                <CardTitle className='text-2xl'>{plan.name}</CardTitle>
+                <CardDescription className='text-base'>{plan.description}</CardDescription>
+                <div className='mt-4'>
+                  <span className='text-4xl font-bold'>{currentPricing.price_display}</span>
+                  <span className='text-muted-foreground ml-1'>
+                    /{billingCycle === 'monthly' ? 'month' : 'year'}
+                  </span>
+                </div>
+                {hasSavings ? (
+                  <div className='text-sm text-green-600 font-medium mt-2 bg-green-50 dark:bg-green-900/20 px-3 py-1.5 rounded-full inline-block border border-green-200 dark:border-green-800'>
+                    Save ${usdSavings.toFixed(0)} with yearly billing
+                  </div>
+                ) : null}
+              </CardHeader>
 
-            <Button asChild className='w-full mt-6' size='lg'>
-              <Link href={plan.href}>
-                {plan.cta}
-                <ArrowRight className='ml-2 h-4 w-4' />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+              <CardContent className='space-y-4 flex flex-col flex-grow'>
+                <ul className='space-y-3 flex-grow'>
+                  {plan.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className='flex items-center gap-3'>
+                      <Check className='h-5 w-5 text-green-500 flex-shrink-0' />
+                      <span className='text-sm'>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button 
+                  className='w-full mt-6' 
+                  size='lg'
+                  onClick={() => {
+                    // TODO: Implement checkout flow
+                    console.log('Checkout plan:', plan.id, billingCycle)
+                  }}
+                >
+                  Get Started
+                  <ArrowRight className='ml-2 h-4 w-4' />
+                </Button>
+              </CardContent>
+            </Card>
+          )
+        })}
+      </div>
+    </>
   )
 }
