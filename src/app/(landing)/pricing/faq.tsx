@@ -23,7 +23,7 @@ export default function Faq() {
   return (
     <div className='max-w-4xl mx-auto mb-20'>
       <div className='text-center mb-16'>
-        <h2 className='text-4xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent'>
+        <h2 className='text-4xl font-bold mb-4'>
           Frequently asked questions
         </h2>
         <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>

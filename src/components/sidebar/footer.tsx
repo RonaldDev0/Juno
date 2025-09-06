@@ -84,7 +84,7 @@ export default function Footer() {
                 className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
               >
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.avatar} alt={user.user_metadata?.username || 'User'} />
+                  <AvatarImage src={user.user_metadata.avatar_url} alt={user.user_metadata?.username || 'User'} />
                   <AvatarFallback className='rounded-lg'>
                     {user.user_metadata?.username?.charAt(0)?.toUpperCase() || 'U'}
                   </AvatarFallback>

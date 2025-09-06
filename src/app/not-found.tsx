@@ -14,7 +14,7 @@ export default function NotFoundPage() {
       
       <div className='flex flex-col sm:flex-row gap-3'>
         <Button asChild>
-          <Link href='/'>Go Home</Link>
+          <Link href='/home'>Go Home</Link>
         </Button>
         <Button variant='outline' asChild>
           <Link href='/login'>Login</Link>

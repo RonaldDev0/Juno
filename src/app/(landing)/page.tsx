@@ -1,9 +1,9 @@
 import Hero from './components/hero'
 import Features from './components/features'
 
-export default function componentsPage() {
+export default function LandingPage() {
   return (
-    <main>
+    <main className='w-full min-h-screen'>
       <Hero />
       <Features />
     </main>
