@@ -20,8 +20,8 @@ type ILink = {
 }
 
 const centerLinks: ILink[] = [
-  { label: 'Features', href: '/features' },
-  { label: 'Docs', href: '/docs' },
+  { label: 'Features', href: '/' },
+  { label: 'Docs', href: '/' },
   { label: 'Pricing', href: '/pricing' }
 ]
 
