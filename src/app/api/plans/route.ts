@@ -22,7 +22,6 @@ export async function GET() {
       )
     }
 
-    console.log('Plans:', plans)
 
     // Transform data for frontend consumption
     const transformedPlans = plans.map((plan: any) => ({

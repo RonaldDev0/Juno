@@ -4,13 +4,32 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Check, Star, ArrowRight } from 'lucide-react'
+import { Check, Star, ArrowRight, Loader2 } from 'lucide-react'
 import { usePlans } from '@/hooks/use-plans'
-
+import { usePay } from '@/hooks/use-pay'
 
 export default function Pricing() {
   const { plans, loading, error } = usePlans()
+  const { processPayment, isLoading: paymentLoading, error: paymentError } = usePay()
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
+  const [processingPlan, setProcessingPlan] = useState<string | null>(null)
+
+  const handlePayment = async (plan: { id: string; pricing: { monthly: { variant_id: string }; yearly: { variant_id: string } } }) => {
+    setProcessingPlan(plan.id)
+    
+    try {
+      await processPayment({
+        planId: plan.id,
+        billingCycle,
+        planPricing: plan.pricing
+      })
+    } catch (error) {
+      console.error('Payment error:', error)
+      // You can add toast notification here
+    } finally {
+      setProcessingPlan(null)
+    }
+  }
 
   // Loading state with skeleton
   if (loading) {
@@ -54,6 +73,13 @@ export default function Pricing() {
 
   return (
     <>
+      {/* Payment Error Display */}
+      {paymentError && (
+        <div className='mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg'>
+          <p className='text-red-600 dark:text-red-400 text-sm'>{paymentError}</p>
+        </div>
+      )}
+
       {/* Billing Toggle - Sliding Background */}
       <div className='flex flex-col items-center space-y-4 mb-12'>
         <div className='relative bg-muted/30 rounded-full p-1.5 border border-border/50'>
@@ -155,13 +181,20 @@ export default function Pricing() {
                 <Button 
                   className='w-full mt-6' 
                   size='lg'
-                  onClick={() => {
-                    // TODO: Implement checkout flow
-                    console.log('Checkout plan:', plan.id, billingCycle)
-                  }}
+                  onClick={() => handlePayment(plan)}
+                  disabled={processingPlan === plan.id}
                 >
-                  Get Started
-                  <ArrowRight className='ml-2 h-4 w-4' />
+                  {processingPlan === plan.id ? (
+                    <>
+                      <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      Get Started
+                      <ArrowRight className='ml-2 h-4 w-4' />
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
