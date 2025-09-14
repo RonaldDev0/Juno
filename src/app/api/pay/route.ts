@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     const checkoutUrl = await createCheckout(process.env.LEMONSQUEEZY_STORE_ID!, variantIds[variantIds.length - 1], {
       productOptions: {
-        redirectUrl: 'http://localhost:3000/home?payment=success',
+        redirectUrl: `${process.env.NEXT_PUBLIC_SITE}/home?payment=success`,
         enabledVariants: variantIds
       }
     })
