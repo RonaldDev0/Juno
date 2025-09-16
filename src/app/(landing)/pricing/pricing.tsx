@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Check, Star, ArrowRight, Loader2 } from 'lucide-react'
 import { usePlans } from '@/hooks/use-plans'
 import { usePay } from '@/hooks/use-pay'
+import { toast } from 'sonner'
 
 export default function Pricing() {
   const { plans, loading, error } = usePlans()
@@ -25,7 +26,7 @@ export default function Pricing() {
       })
     } catch (error) {
       console.error('Payment error:', error)
-      // You can add toast notification here
+      // Error handling is now done in the usePay hook with toast
     } finally {
       setProcessingPlan(null)
     }
@@ -73,13 +74,6 @@ export default function Pricing() {
 
   return (
     <>
-      {/* Payment Error Display */}
-      {paymentError && (
-        <div className='mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg'>
-          <p className='text-red-600 dark:text-red-400 text-sm'>{paymentError}</p>
-        </div>
-      )}
-
       {/* Billing Toggle - Sliding Background */}
       <div className='flex flex-col items-center space-y-4 mb-12'>
         <div className='relative bg-muted/30 rounded-full p-1.5 border border-border/50'>

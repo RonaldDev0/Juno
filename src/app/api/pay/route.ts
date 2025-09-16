@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-// import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { lemonSqueezySetup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js'
 
 lemonSqueezySetup({
@@ -10,6 +10,15 @@ lemonSqueezySetup({
 export async function POST(request: NextRequest) {
   try {
     const { planId, billingCycle, variantIds } = await request.json()
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 })
+    }
+
+    console.log('userId', user.id)
 
     if (!(planId && billingCycle && variantIds)) {
       return NextResponse.json({ message: 'Plan ID, billing cycle, and variant IDs are required' }, { status: 400 })
