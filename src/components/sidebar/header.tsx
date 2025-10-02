@@ -7,7 +7,12 @@ import {
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 
-export default function Header() {
+interface HeaderProps {
+  plan_name?: string
+  isLoading?: boolean
+}
+
+export default function Header({ plan_name = 'Free Plan', isLoading = false }: HeaderProps) {
   return (
     <SidebarHeader>
       <SidebarMenu>
@@ -19,7 +24,11 @@ export default function Header() {
               </div>
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>Juno</span>
-                <span className='truncate text-xs'>Starter plan</span>
+                {isLoading ? (
+                  <div className='h-3 bg-gray-200 rounded animate-pulse w-16'></div>
+                ) : (
+                  <span className='truncate text-xs'>{plan_name}</span>
+                )}
               </div>
             </Link>
           </SidebarMenuButton>

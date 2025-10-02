@@ -37,7 +37,7 @@ import Opt from './opt'
 import Link from 'next/link'
 import FooterSkeleton from './footer-skeleton'
 
-export default function Footer() {
+export default function Footer({ hasActiveSubscription }: { hasActiveSubscription: boolean }) {
   const { isMobile, state } = useSidebar()
   const [_state, formAction, isPending] = useActionState(logout, { success: false })
   const [user, setUser] = useState<any>(null)
@@ -70,7 +70,7 @@ export default function Footer() {
 
   return (
     <SidebarFooter>
-      {state === 'expanded' && (
+      {(state === 'expanded' && !hasActiveSubscription) && (
         <div className='p-1 mb-6'>
           <Opt />
         </div>
