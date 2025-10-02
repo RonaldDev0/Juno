@@ -5,6 +5,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton
 } from '@/components/ui/sidebar'
+import { Skeleton } from '@/components/ui/skeleton'
 import Link from 'next/link'
 
 interface HeaderProps {
@@ -25,7 +26,7 @@ export default function Header({ plan_name = 'Free Plan', isLoading = false }: H
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>Juno</span>
                 {isLoading ? (
-                  <div className='h-3 bg-gray-200 rounded animate-pulse w-16'></div>
+                  <Skeleton className='h-3 w-16' />
                 ) : (
                   <span className='truncate text-xs'>{plan_name}</span>
                 )}
