@@ -28,7 +28,7 @@ export default function Header({ plan_name = 'Free Plan', isLoading = false }: H
                 {isLoading ? (
                   <Skeleton className='h-3 w-16' />
                 ) : (
-                  <span className='truncate text-xs'>{plan_name}</span>
+                  <span className='truncate text-xs text-muted-foreground'>{plan_name}</span>
                 )}
               </div>
             </Link>
