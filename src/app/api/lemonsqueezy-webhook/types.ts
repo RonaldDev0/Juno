@@ -34,6 +34,11 @@ export interface LemonSqueezyWebhookEvent {
       
       // Additional metadata
       test_mode?: boolean
+
+      // URLs
+      urls: {
+        invoice_url: string
+      }
     }
   }
 }
