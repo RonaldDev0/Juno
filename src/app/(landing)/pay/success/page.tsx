@@ -9,14 +9,14 @@ export default function PaySuccessPage() {
   const { hasActiveSubscription, isLoading, error, refetch } = useSubscription()
   const [timedOut, setTimedOut] = useState(false)
 
-  // Cuando la suscripción esté activa, redirigimos al dashboard
+  // When the subscription is active, redirect to the dashboard
   useEffect(() => {
     if (hasActiveSubscription) {
       router.replace('/home')
     }
   }, [hasActiveSubscription, router])
 
-  // Polling: reintenta cada 3s hasta 60s
+  // Polling: refetch every 3s up to 60s
   useEffect(() => {
     const interval = setInterval(() => {
       refetch()
@@ -36,12 +36,12 @@ export default function PaySuccessPage() {
   const showProcessing = isLoading || (!hasActiveSubscription && !timedOut)
 
   return (
-    <div className='flex min-h-[60vh] items-center justify-center p-6'>
+    <div className='flex min-h-[95dvh] items-center justify-center p-6'>
       <div className='max-w-md text-center'>
         {showProcessing && (
           <>
-            <div className='mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-muted-foreground border-t-transparent' />
-            <h1 className='text-xl font-semibold'>Procesando tu pago…</h1>
+            <div className='mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent' />
+            <h1 className='text-xl font-semibold text-primary'>Procesando tu pago…</h1>
             <p className='mt-2 text-sm text-muted-foreground'>
               Estamos activando tu suscripción. Esto puede tardar unos segundos.
             </p>
@@ -50,14 +50,14 @@ export default function PaySuccessPage() {
 
         {!showProcessing && hasActiveSubscription && (
           <>
-            <h1 className='text-xl font-semibold'>¡Listo!</h1>
+            <h1 className='text-xl font-semibold text-primary'>¡Listo!</h1>
             <p className='mt-2 text-sm text-muted-foreground'>Redirigiendo a tu dashboard…</p>
           </>
         )}
 
         {!hasActiveSubscription && timedOut && (
           <>
-            <h1 className='text-xl font-semibold'>Aún estamos esperando el webhook</h1>
+            <h1 className='text-xl font-semibold text-primary'>Aún estamos esperando el webhook</h1>
             <p className='mt-2 text-sm text-muted-foreground'>
               Tu pago fue recibido, pero la confirmación tardó más de lo normal.
               Pulsa refrescar para reintentar o vuelve al inicio.
