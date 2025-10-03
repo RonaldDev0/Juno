@@ -10,9 +10,7 @@ export async function POST(req: NextRequest) {
 
     if (!user) return NextResponse.json({ message: 'User not found' }, { status: 404 })
 
-    const url = await getCheckoutUrl(variantIds, planId, billingCycle, user.id)
-
-    return NextResponse.json({ url }, { status: 200 })
+    return await getCheckoutUrl(variantIds, planId, billingCycle, user.id)
   } catch (error) {
     return NextResponse.json({
       message: 'Internal server error',

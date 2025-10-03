@@ -68,6 +68,16 @@ export function usePay(): UsePayReturn {
       if (!response.ok) {
         const errorData = await response.json()
         toast.dismiss(loadingToast)
+
+        // Handle already subscribed case gracefully
+        if (errorData?.code === 'ALREADY_SUBSCRIBED') {
+          toast.info('You already have an active subscription', {
+            description: 'Redirecting you to your dashboard'
+          })
+          router.push(errorData.redirectUrl || '/home')
+          return
+        }
+
         toast.error('Payment failed', {
           description: errorData.message || 'Unable to process payment. Please try again.'
         })

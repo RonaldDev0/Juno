@@ -7,40 +7,56 @@ lemonSqueezySetup({
   onError: error => console.error('Lemonsqueezy error:', error)
 })
 
-export async function getCheckoutUrl(variantIds: number[], planId: string, billingCycle: string, userId: string) {
+export async function getCheckoutUrl(
+  variantIds: Array<number | string>,
+  planId: string,
+  billingCycle: string,
+  userId: string
+): Promise<NextResponse> {
   const supabase = await createClient()
 
   const { data: getUserActiveSubscription, error } = await supabase.rpc('get_user_active_subscription', {
     user_uuid: userId
   })
 
-  if (error) return NextResponse.json({ message: 'Error checking if user can change subscription' }, { status: 500 })
+  if (error) {
+    return NextResponse.json({ message: 'Error checking if user can change subscription' }, { status: 500 })
+  }
 
   const isUserActiveSubscription = getUserActiveSubscription && getUserActiveSubscription.length > 0
 
   if (isUserActiveSubscription) {
-    return NextResponse.json({ message: 'You already have an active subscription', url: `${process.env.NEXT_PUBLIC_SITE}/home` }, { status: 400 })
+    return NextResponse.json({
+      message: 'You already have an active subscription',
+      code: 'ALREADY_SUBSCRIBED',
+      redirectUrl: `${process.env.NEXT_PUBLIC_SITE}/home`
+    }, { status: 400 })
   }
 
-  if (!(planId && billingCycle && variantIds)) {
-    return NextResponse.json({ message: 'Plan ID, billing cycle, and variant IDs are required' }, { status: 400 })
+  if (!(planId && billingCycle && variantIds && variantIds.length > 0)) {
+    return NextResponse.json({
+      message: 'Plan ID, billing cycle, and variant IDs are required',
+      code: 'INVALID_REQUEST'
+    }, { status: 400 })
   }
 
   // TODO: create user
 
   // TODO: create checkout url
-  const checkoutUrl = await createCheckout(process.env.LEMONSQUEEZY_STORE_ID!, variantIds[variantIds.length - 1], {
+  const lastVariantId = Number(variantIds[variantIds.length - 1])
+  const enabledVariants = variantIds.map(v => Number(v))
+  const checkoutUrl = await createCheckout(process.env.LEMONSQUEEZY_STORE_ID!, lastVariantId, {
     checkoutOptions: {
       embed: false,
       logo: false,
     },
     productOptions: {
       redirectUrl: `${process.env.NEXT_PUBLIC_SITE}/home`,
-      enabledVariants: variantIds,
+      enabledVariants,
       receiptButtonText: 'Go to Dashboard',
       receiptThankYouNote: 'Thank you for signing up to Juno'
     }
   })
 
-  return checkoutUrl.data?.data.attributes.url
+  return NextResponse.json({ url: checkoutUrl.data?.data.attributes.url }, { status: 200 })
 }
