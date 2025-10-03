@@ -51,7 +51,8 @@ export async function getCheckoutUrl(
       logo: false,
     },
     productOptions: {
-      redirectUrl: `${process.env.NEXT_PUBLIC_SITE}/home`,
+      // After payment, redirect to a processing page that will poll subscription status
+      redirectUrl: `${process.env.NEXT_PUBLIC_SITE}/pay/success`,
       enabledVariants,
       receiptButtonText: 'Go to Dashboard',
       receiptThankYouNote: 'Thank you for signing up to Juno'
