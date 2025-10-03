@@ -21,9 +21,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unhandled event type' }, { status: 400 })
     }
 
-    eventType.handler(event)
+    const result = await eventType.handler(event)
 
-    return NextResponse.json({ received: true }, { status: 200 })
+    return NextResponse.json(result ?? { message: 'whithout result' }, { status: 200 })
 
   } catch (error) {
     console.error('Webhook processing error:', error)
@@ -33,4 +33,3 @@ export async function POST(req: NextRequest) {
     )
   }
 }
-

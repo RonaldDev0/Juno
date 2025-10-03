@@ -16,7 +16,7 @@ import {
 
 type EventType = {
   name: string,
-  handler: (e: LemonSqueezyWebhookEvent) => void
+  handler: (e: LemonSqueezyWebhookEvent) => Promise<any>
 }
 
 export const eventTypes: EventType[] = [

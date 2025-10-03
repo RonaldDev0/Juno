@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { lemonSqueezySetup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js'
 import { createClient } from '@/lib/supabase/server'
 

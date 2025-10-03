@@ -58,6 +58,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
   try {
     const supabase = createAdminClient()
     const attributes = e.data.attributes
+    const logs: any[] = []
 
     // 1. Find user by email in auth.users
     const { data: users, error: userError } = await supabase.auth.admin.listUsers()
@@ -83,8 +84,13 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
         user_id: userId,
         existing_subscription_id: existingSubscription.id
       })
-      // TODO: Handle subscription update instead of creation
-      return
+      return {
+        message: 'User already has active subscription, updating instead of creating new one',
+        context: {
+          user_id: userId,
+          existing_subscription_id: existingSubscription.id
+        }
+      }
     }
 
     // 3. Find pricing information
@@ -93,11 +99,13 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
     // If variant_id is not directly available, try to fetch it from LemonSqueezy API
     if (!attributes.variant_id && attributes.subscription_id) {
       console.log('Fetching variant_id from LemonSqueezy API using subscription_id:', attributes.subscription_id)
+      logs.push({ message: 'Fetching variant_id from LemonSqueezy API using subscription_id', context: { subscription_id: attributes.subscription_id } })
       
       const variantId = await fetchVariantIdFromSubscription(attributes.subscription_id)
       
       if (variantId) {
         console.log('Successfully fetched variant_id:', variantId)
+        logs.push({ message: 'Successfully fetched variant_id', context: { variant_id: variantId } })
         
         // Look up pricing with the fetched variant_id
         const { data: fetchedPricing, error: pricingError } = await supabase
@@ -118,6 +126,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
     if (!pricing) {
       if (!attributes.variant_id) {
         console.log('No variant_id available - handling as free tier subscription')
+        logs.push({ message: 'No variant_id available - handling as free tier subscription' })
         
         // Get the free plan from the database
         const { data: freePlan, error: freePlanError } = await supabase
@@ -128,7 +137,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
         
         if (freePlanError || !freePlan) {
           console.error('Free plan not found in DB:', freePlanError)
-          return
+          return { error: 'Free plan not found in DB', details: freePlanError }
         }
         
         // Get the free pricing for this plan
@@ -141,7 +150,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
         
         if (freePricingError || !freePricing) {
           console.error('Free pricing not found in DB:', freePricingError)
-          return
+          return { error: 'Free pricing not found in DB', details: freePricingError }
         }
         
         pricing = freePricing
@@ -157,7 +166,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
 
         if (pricingError || !paidPricing) {
           console.error('Pricing not found in DB for variant:', attributes.variant_id, pricingError)
-          return
+          return { error: 'Pricing not found in DB for variant', details: { variant_id: attributes.variant_id, pricingError } }
         }
         
         pricing = paidPricing
@@ -166,7 +175,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
     
     if (!pricing) {
       console.error('Failed to determine pricing')
-      return
+      return { error: 'Failed to determine pricing' }
     }
 
     // 4. Create new subscription
@@ -194,7 +203,7 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
 
     if (subError || !subscription) {
       console.error('Error creating subscription:', subError)
-      return
+      return { error: 'Error creating subscription', details: subError }
     }
 
     // 5. Insert payment record
@@ -214,7 +223,18 @@ export async function handleSubscriptionPaymentSuccess(e: LemonSqueezyWebhookEve
 
     if (paymentError) {
       console.error('Error inserting payment record:', paymentError)
-      return
+      return { error: 'Error inserting payment record', details: paymentError }
+    }
+
+    return {
+      message: 'Subscription created and payment recorded',
+      context: {
+        user_id: userId,
+        subscription_id: subscription.id,
+        pricing_id: pricing.id,
+        amount_cents: attributes.total_usd
+      },
+      logs
     }
 
   } catch (error) {

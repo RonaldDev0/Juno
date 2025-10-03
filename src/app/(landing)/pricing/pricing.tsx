@@ -7,11 +7,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Check, Star, ArrowRight, Loader2 } from 'lucide-react'
 import { usePlans } from '@/hooks/use-plans'
 import { usePay } from '@/hooks/use-pay'
-import { toast } from 'sonner'
 
 export default function Pricing() {
   const { plans, loading, error } = usePlans()
-  const { processPayment, isLoading: paymentLoading, error: paymentError } = usePay()
+  const { processPayment } = usePay()
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
   const [processingPlan, setProcessingPlan] = useState<string | null>(null)
 
