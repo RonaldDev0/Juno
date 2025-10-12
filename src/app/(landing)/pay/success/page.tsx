@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSubscription } from '@/hooks/use-subscription'
+import { useSubscriptionStore, selectHasActiveSubscription, selectLoading } from '@/store/subscription'
 
 export default function PaySuccessPage() {
   const router = useRouter()
-  const { hasActiveSubscription, isLoading, error, refetch } = useSubscription()
+  const hasActiveSubscription = useSubscriptionStore(selectHasActiveSubscription)
+  const isLoading = useSubscriptionStore(selectLoading)
   const [timedOut, setTimedOut] = useState(false)
 
   // When the subscription is active, redirect to the dashboard
@@ -19,7 +20,8 @@ export default function PaySuccessPage() {
   // Polling: refetch every 3s up to 60s
   useEffect(() => {
     const interval = setInterval(() => {
-      refetch()
+      // Refresca la suscripción desde el store global
+      useSubscriptionStore.getState().fetch()
     }, 3000)
 
     const timeout = setTimeout(() => {
@@ -31,7 +33,7 @@ export default function PaySuccessPage() {
       clearInterval(interval)
       clearTimeout(timeout)
     }
-  }, [refetch])
+  }, [])
 
   const showProcessing = isLoading || (!hasActiveSubscription && !timedOut)
 
@@ -67,7 +69,7 @@ export default function PaySuccessPage() {
                 className='rounded-md bg-primary px-4 py-2 text-primary-foreground'
                 onClick={() => {
                   setTimedOut(false)
-                  refetch()
+                  useSubscriptionStore.getState().fetch()
                 }}
               >
                 Refrescar estado

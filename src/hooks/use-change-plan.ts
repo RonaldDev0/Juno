@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { usePlans } from './use-plans'
-import { useSubscription } from './use-subscription'
+import { useSubscriptionStore, selectSubscription, selectHasActiveSubscription, type SubscriptionData } from '@/store/subscription'
 import { createClient } from '@/lib/supabase/client'
 
 type BillingCycle = 'monthly' | 'yearly'
@@ -36,7 +36,7 @@ interface UseChangePlanReturn {
   // Data
   plans: ReturnType<typeof usePlans>['plans']
   plansLoading: boolean
-  subscription: ReturnType<typeof useSubscription>['subscription']
+  subscription: SubscriptionData | null
   hasActiveSubscription: boolean
 
   // Computed
@@ -56,7 +56,8 @@ export function useChangePlan(options: UseChangePlanOptions = {}): UseChangePlan
   const router = useRouter()
   const supabase = createClient()
   const { plans, loading: plansLoading } = usePlans()
-  const { subscription, hasActiveSubscription } = useSubscription()
+  const subscription = useSubscriptionStore(selectSubscription)
+  const hasActiveSubscription = useSubscriptionStore(selectHasActiveSubscription)
 
   const [open, setOpen] = useState<boolean>(options.initialOpen ?? false)
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)

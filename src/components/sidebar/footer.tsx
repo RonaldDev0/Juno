@@ -8,7 +8,6 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles
 } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
 
@@ -33,12 +32,11 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
-import Opt from './opt'
 import Link from 'next/link'
 import FooterSkeleton from './footer-skeleton'
 
-export default function Footer({ hasActiveSubscription }: { hasActiveSubscription: boolean }) {
-  const { isMobile, state } = useSidebar()
+export default function Footer() {
+  const { isMobile } = useSidebar()
   const [_state, formAction, isPending] = useActionState(logout, { success: false })
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -70,11 +68,6 @@ export default function Footer({ hasActiveSubscription }: { hasActiveSubscriptio
 
   return (
     <SidebarFooter>
-      {(state === 'expanded' && !hasActiveSubscription) && (
-        <div className='p-1 mb-6'>
-          <Opt />
-        </div>
-      )}
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
@@ -117,14 +110,6 @@ export default function Footer({ hasActiveSubscription }: { hasActiveSubscriptio
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <Link href='/pricing'>
-                  <DropdownMenuItem>
-                    <Sparkles />
-                    Upgrade to Pro
-                  </DropdownMenuItem>
-                </Link>
-              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <Link href='/profile'>

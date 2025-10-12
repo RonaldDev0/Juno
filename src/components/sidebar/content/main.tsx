@@ -1,6 +1,11 @@
 'use client'
 
-import { ChevronRight, SquareTerminal, Bot, BookOpen, Settings2 } from 'lucide-react'
+import {
+  ChevronRight,
+  SquareTerminal,
+  Settings2,
+  Home
+} from 'lucide-react'
 
 import {
   Collapsible,
@@ -18,92 +23,27 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
+import Link from 'next/link'
 
 const items = [
+  { 
+    title: 'Home',
+    url: '/home',
+    icon: Home
+  },
   {
-    title: 'Playground',
-    url: '#',
-    icon: SquareTerminal,
+    title: 'Profile',
+    url: '/profile',
+    icon: Settings2,
     isActive: true,
     items: [
-      {
-        title: 'History',
-        url: '#'
-      },
-      {
-        title: 'Starred',
-        url: '#'
-      },
-      {
-        title: 'Settings',
-        url: '#'
-      }
+      { title: 'Reset password', url: '/reset-password' }
     ]
   },
   {
-    title: 'Models',
-    url: '#',
-    icon: Bot,
-    items: [
-      {
-        title: 'Genesis',
-        url: '#'
-      },
-      {
-        title: 'Explorer',
-        url: '#'
-      },
-      {
-        title: 'Quantum',
-        url: '#'
-      }
-    ]
-  },
-  {
-    title: 'Documentation',
-    url: '#',
-    icon: BookOpen,
-    items: [
-      {
-        title: 'Introduction',
-        url: '#'
-      },
-      {
-        title: 'Get Started',
-        url: '#'
-      },
-      {
-        title: 'Tutorials',
-        url: '#'
-      },
-      {
-        title: 'Changelog',
-        url: '#'
-      }
-    ]
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings2,
-    items: [
-      {
-        title: 'General',
-        url: '#'
-      },
-      {
-        title: 'Team',
-        url: '#'
-      },
-      {
-        title: 'Billing',
-        url: '#'
-      },
-      {
-        title: 'Limits',
-        url: '#'
-      }
-    ]
+    title: 'Subscription',
+    url: '/subscription',
+    icon: SquareTerminal
   }
 ]
 
@@ -116,10 +56,10 @@ export default function Main() {
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+                <Link href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
@@ -134,9 +74,9 @@ export default function Main() {
                       {item.items?.map(subItem => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <Link href={subItem.url}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

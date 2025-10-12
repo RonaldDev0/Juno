@@ -2,7 +2,6 @@
 
 import { useChangePlan } from '@/hooks/use-change-plan'
 import { usePlans } from '@/hooks/use-plans'
-import { useSubscription } from '@/hooks/use-subscription'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,7 +10,6 @@ import { toast } from 'sonner'
 
 export default function ChangePlanPage() {
   const { plans, loading: plansLoading } = usePlans()
-  const { subscription, hasActiveSubscription } = useSubscription()
   const {
     open,
     setOpen,
@@ -23,6 +21,8 @@ export default function ChangePlanPage() {
     confirmChange,
     isProcessing,
     getDialogProps,
+    subscription,
+    hasActiveSubscription,
   } = useChangePlan({
     onConfirm: async ({ planId, billingCycle }) => {
       try {
@@ -117,7 +117,7 @@ export default function ChangePlanPage() {
               <Card key={plan.id} className='flex flex-col h-full'>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 mb-2'>
                   <CardTitle className='text-base font-medium'>{plan.name}</CardTitle>
-                  {isCurrentPlan ? (
+                  {isCurrentCycle ? (
                     <Badge variant='secondary'>Current</Badge>
                   ) : plan.is_popular ? (
                     <Badge>Popular</Badge>
@@ -125,7 +125,7 @@ export default function ChangePlanPage() {
                 </CardHeader>
                 <CardContent className='text-sm text-muted-foreground'>
                   {plan.description}
-                  {isCurrentPlan && (
+                  {isCurrentCycle && (
                     <div className='mt-2 text-xs'>
                       Currently on this plan · {subscription?.billing_cycle}
                     </div>
