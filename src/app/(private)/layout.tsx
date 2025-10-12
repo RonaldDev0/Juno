@@ -9,7 +9,7 @@ import { useSubscriptionStore } from '@/store/subscription'
 
 export default function PrivateLayout({ children }: Readonly<{ children: ReactNode }>) {
   useEffect(() => {
-    // Inicializa la suscripción global al entrar en el área privada
+    useSubscriptionStore.getState().bindAuthListener()
     useSubscriptionStore.getState().init()
   }, [])
   return (
