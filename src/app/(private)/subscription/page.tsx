@@ -11,7 +11,6 @@ import { toast } from 'sonner'
 export default function ChangePlanPage() {
   const { plans, loading: plansLoading } = usePlans()
   const {
-    open,
     setOpen,
     closeModal,
     selectedPlanId,
@@ -119,9 +118,9 @@ export default function ChangePlanPage() {
                   <CardTitle className='text-base font-medium'>{plan.name}</CardTitle>
                   {isCurrentCycle ? (
                     <Badge variant='secondary'>Current</Badge>
-                  ) : plan.is_popular ? (
+                  ) : plan.is_popular && (
                     <Badge>Popular</Badge>
-                  ) : null}
+                  )}
                 </CardHeader>
                 <CardContent className='text-sm text-muted-foreground'>
                   {plan.description}

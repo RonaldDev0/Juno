@@ -1,15 +1,14 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
 import { logout } from './actions'
 import {
-  BadgeCheck,
+  User,
   Bell,
   ChevronsUpDown,
   CreditCard,
   LogOut,
 } from 'lucide-react'
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState, useEffect } from 'react'
 
 import {
   Avatar,
@@ -34,36 +33,19 @@ import {
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 import FooterSkeleton from './footer-skeleton'
+import { useUserStore, selectUser, selectUserLoading } from '@/store/user'
 
 export default function Footer() {
   const { isMobile } = useSidebar()
   const [_state, formAction, isPending] = useActionState(logout, { success: false })
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const user = useUserStore(selectUser)
+  const loading = useUserStore(selectUserLoading)
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const supabase = createClient()
-        const { data, error } = await supabase.auth.getUser()
-
-        if (!error && data?.user) {
-          setUser(data.user)
-        }
-      } catch (error) {
-        console.error('Error getting user:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    getUser()
+    useUserStore.getState().init()
   }, [])
 
-  if (loading) {
-    return <FooterSkeleton />
-  }
-
+  if (loading) return <FooterSkeleton />
   if (!user) return null
 
   return (
@@ -77,7 +59,7 @@ export default function Footer() {
                 className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
               >
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.user_metadata.avatar_url} alt={user.user_metadata?.username || 'User'} />
+                  <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.username || 'User'} />
                   <AvatarFallback className='rounded-lg'>
                     {user.user_metadata?.username?.charAt(0)?.toUpperCase() || 'U'}
                   </AvatarFallback>
@@ -98,7 +80,7 @@ export default function Footer() {
               <DropdownMenuLabel className='p-0 font-normal'>
                 <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                   <Avatar className='h-8 w-8 rounded-lg'>
-                    <AvatarImage src={user.avatar} alt={user.user_metadata?.username || 'User'} />
+                    <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.username || 'User'} />
                     <AvatarFallback className='rounded-lg'>
                       {user.user_metadata?.username?.charAt(0)?.toUpperCase() || 'U'}
                     </AvatarFallback>
@@ -110,22 +92,19 @@ export default function Footer() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <Link href='/profile'>
                   <DropdownMenuItem>
-                    <BadgeCheck />
+                    <User />
                     Profile
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem>
-                  <CreditCard />
-                  Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
-                </DropdownMenuItem>
+                <Link href='/subscription'>
+                  <DropdownMenuItem>
+                    <CreditCard />
+                    Subscription
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <form

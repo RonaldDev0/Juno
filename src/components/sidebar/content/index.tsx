@@ -1,10 +1,10 @@
 import { SidebarContent } from '@/components/ui/sidebar'
-import Main from './main'
+import Workspace from './workspace'
 
 export default function Content() {
   return (
     <SidebarContent>
-      <Main />
+      <Workspace />
     </SidebarContent>
   )
 }

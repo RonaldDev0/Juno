@@ -2,8 +2,6 @@
 
 import {
   ChevronRight,
-  SquareTerminal,
-  Settings2,
   Home
 } from 'lucide-react'
 
@@ -25,32 +23,26 @@ import {
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 
-const items = [
-  { 
+type Item = {
+  title: string
+  url: string
+  icon: React.ComponentType<any>
+  isActive?: boolean
+  items?: { title: string; url: string }[]
+}
+
+const items: Item[] = [
+  {
     title: 'Home',
     url: '/home',
-    icon: Home
+    icon: Home,
   },
-  {
-    title: 'Profile',
-    url: '/profile',
-    icon: Settings2,
-    isActive: true,
-    items: [
-      { title: 'Reset password', url: '/reset-password' }
-    ]
-  },
-  {
-    title: 'Subscription',
-    url: '/subscription',
-    icon: SquareTerminal
-  }
 ]
 
-export default function Main() {
+export default function Workspace() {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Workspace</SidebarGroupLabel>
       <SidebarMenu>
         {items.map(item => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
@@ -71,7 +63,7 @@ export default function Main() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {item.items?.map(subItem => (
+                      {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
                             <Link href={subItem.url}>

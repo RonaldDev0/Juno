@@ -2,8 +2,6 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { createClient } from '@/lib/supabase/client'
 
-const TTL_MS = 5 * 60 * 1000 // 5 minutos
-
 export interface SubscriptionData {
   subscription_id: string
   plan_name: string
@@ -19,14 +17,10 @@ type SubscriptionState = {
   isLoading: boolean
   error: string | null
   initialized: boolean
-  lastFetchedAt?: number
-  inFlight: boolean
-  authListenerBound: boolean
   setSubscription: (sub: SubscriptionData | null) => void
   clear: () => void
   fetch: () => Promise<void>
   init: () => Promise<void>
-  bindAuthListener: () => void
 }
 
 export const useSubscriptionStore = create<SubscriptionState>()(
@@ -37,9 +31,6 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       isLoading: false,
       error: null,
       initialized: false,
-      lastFetchedAt: undefined,
-      inFlight: false,
-      authListenerBound: false,
 
       setSubscription: (sub) =>
         set({
@@ -51,8 +42,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
 
       fetch: async () => {
         try {
-          if (get().inFlight) return
-          set({ isLoading: true, error: null, inFlight: true })
+          set({ isLoading: true, error: null })
 
           const supabase = createClient()
           const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -72,41 +62,18 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           }
 
           const sub = subscriptionData && subscriptionData.length > 0 ? (subscriptionData[0] as SubscriptionData) : null
-          set({ subscription: sub, hasActiveSubscription: !!sub && sub.status === 'active', lastFetchedAt: Date.now() })
+          set({ subscription: sub, hasActiveSubscription: !!sub && sub.status === 'active' })
         } catch (err) {
           set({ subscription: null, hasActiveSubscription: false, error: 'Unexpected error fetching subscription' })
         } finally {
-          set({ isLoading: false, initialized: true, inFlight: false })
+          set({ isLoading: false, initialized: true })
         }
       },
 
       init: async () => {
         if (!get().initialized) {
-          // Vincular listener de auth una sola vez
-          get().bindAuthListener()
-
-          const { subscription, lastFetchedAt } = get()
-          const fresh = lastFetchedAt && (Date.now() - lastFetchedAt < TTL_MS)
-          if (subscription && fresh) {
-            set({ initialized: true })
-            return
-          }
-
           await get().fetch()
         }
-      },
-
-      bindAuthListener: () => {
-        if (get().authListenerBound) return
-        const supabase = createClient()
-        supabase.auth.onAuthStateChange((event) => {
-          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
-            get().fetch()
-          } else if (event === 'SIGNED_OUT') {
-            get().clear()
-          }
-        })
-        set({ authListenerBound: true })
       },
     }),
     {
@@ -115,7 +82,6 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       partialize: (state) => ({
         subscription: state.subscription,
         hasActiveSubscription: state.hasActiveSubscription,
-        lastFetchedAt: state.lastFetchedAt,
       }),
       version: 1,
     }

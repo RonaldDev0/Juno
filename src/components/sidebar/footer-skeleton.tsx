@@ -12,14 +12,7 @@ export default function FooterSkeleton() {
 
   return (
     <SidebarFooter>
-      {state === 'expanded' && (
-        <div className='p-1 mb-6'>
-          <div className="flex items-center gap-2 p-2">
-            <Skeleton className="h-4 w-4" />
-            <Skeleton className="h-4 flex-1" />
-          </div>
-        </div>
-      )}
+      {/* Match actual footer height: remove extra expanded block */}
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size='lg' className='pointer-events-none'>
@@ -27,7 +20,7 @@ export default function FooterSkeleton() {
             <Skeleton className='h-8 w-8 rounded-lg' />
             
             {/* Text content skeleton */}
-            <div className='grid flex-1 text-left text-sm leading-tight gap-1'>
+            <div className='grid flex-1 text-left text-sm leading-tight'>
               <Skeleton className='h-4 w-20' />
               <Skeleton className='h-3 w-24' />
             </div>

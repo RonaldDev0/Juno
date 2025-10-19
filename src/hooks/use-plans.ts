@@ -1,28 +1,8 @@
-import { useState, useEffect } from 'react'
+'use client'
 
-// =============================================
-// PLANS HOOK - OPTIMIZED DATA FETCHING
-// =============================================
-
-interface PlanPricing {
-  id: string
-  price_cents: number
-  price_display: string
-  variant_id: string
-  savings_percentage?: number
-}
-
-interface Plan {
-  id: string
-  name: string
-  description: string | null
-  features: string[]
-  pricing: {
-    monthly: PlanPricing
-    yearly: PlanPricing
-  }
-  is_popular: boolean
-}
+import { useEffect, useCallback } from 'react'
+import { usePlansStore, selectPlans, selectPlansLoading, selectPlansError } from '@/store/plans'
+import type { Plan } from '@/store/plans'
 
 interface UsePlansReturn {
   plans: Plan[]
@@ -32,48 +12,24 @@ interface UsePlansReturn {
 }
 
 export function usePlans(): UsePlansReturn {
-  const [plans, setPlans] = useState<Plan[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchPlans = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      
-      const response = await fetch('/api/plans', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Cache for 24 hours since plans don't change frequently
-        cache: 'force-cache',
-        next: { revalidate: 86400 } // Revalidate every 24 hours (86400 seconds)
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
-      setPlans(data.plans || [])
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch plans'
-      setError(errorMessage)
-      console.error('Error fetching plans:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const plans = usePlansStore(selectPlans)
+  const loading = usePlansStore(selectPlansLoading)
+  const error = usePlansStore(selectPlansError)
+  const fetch = usePlansStore((s) => s.fetch)
+  const init = usePlansStore((s) => s.init)
 
   useEffect(() => {
-    fetchPlans()
-  }, [])
+    init()
+  }, [init])
+
+  const refetch = useCallback(async () => {
+    await fetch()
+  }, [fetch])
 
   return {
     plans,
     loading,
     error,
-    refetch: fetchPlans
+    refetch,
   }
 }
