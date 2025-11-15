@@ -52,16 +52,16 @@ interface UseChangePlanReturn {
   getDialogProps: () => { open: boolean; onOpenChange: (open: boolean) => void }
 }
 
-export function useChangePlan(options: UseChangePlanOptions = {}): UseChangePlanReturn {
+export function useChangePlan(): UseChangePlanReturn {
   const router = useRouter()
   const supabase = createClient()
   const { plans, loading: plansLoading } = usePlans()
   const subscription = useSubscriptionStore(selectSubscription)
   const hasActiveSubscription = useSubscriptionStore(selectHasActiveSubscription)
 
-  const [open, setOpen] = useState<boolean>(options.initialOpen ?? false)
+  const [open, setOpen] = useState<boolean>(false)
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>(options.initialCycle ?? 'monthly')
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly')
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -122,15 +122,8 @@ export function useChangePlan(options: UseChangePlanOptions = {}): UseChangePlan
         description: 'We will redirect you to manage your subscription'
       })
 
-      if (options.onConfirm) {
-        await options.onConfirm({ planId: selectedPlanId, billingCycle })
-      } else {
-        // Default behavior: try to open customer portal (to be implemented)
-        // As a placeholder, show info and keep the modal open until UI handles navigation
-        toast.info('Customer portal not configured', {
-          description: 'Please implement /api/lemonsqueezy/customer-portal and wire navigation'
-        })
-      }
+      // Redirect to customer portal
+      router.push('/subscription')
 
       toast.dismiss(loadingToast)
       toast.success('Redirecting...', {
@@ -171,6 +164,6 @@ export function useChangePlan(options: UseChangePlanOptions = {}): UseChangePlan
     confirmChange,
     isProcessing,
     error,
-    getDialogProps,
+    getDialogProps
   }
 }

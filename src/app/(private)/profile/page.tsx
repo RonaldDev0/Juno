@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -21,12 +20,6 @@ export default function ProfilePage() {
   const subscription = useSubscriptionStore(selectSubscription)
   const hasActiveSubscription = useSubscriptionStore(selectHasActiveSubscription)
   const subLoading = useSubscriptionStore(selectLoading)
-
-  // Initialize stores once; avoids repeated Supabase calls
-  useEffect(() => {
-    useUserStore.getState().init()
-    useSubscriptionStore.getState().init()
-  }, [])
 
   const handleCopyId = async () => {
     try {

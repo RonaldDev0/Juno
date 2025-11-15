@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { toast } from 'sonner'
 
 export default function ChangePlanPage() {
   const { plans, loading: plansLoading } = usePlans()
@@ -22,21 +21,7 @@ export default function ChangePlanPage() {
     getDialogProps,
     subscription,
     hasActiveSubscription,
-  } = useChangePlan({
-    onConfirm: async ({ planId, billingCycle }) => {
-      try {
-        // Placeholder: here you would call your customer portal endpoint
-        // const res = await fetch('/api/lemonsqueezy/customer-portal')
-        // const data = await res.json()
-        // window.location.href = data.url
-        toast.info('Customer portal not configured', {
-          description: 'Implement /api/lemonsqueezy/customer-portal to redirect'
-        })
-      } catch (err) {
-        throw err
-      }
-    }
-  })
+  } = useChangePlan()
 
   // Do not auto-open the dialog on first render; open only on user action
 
@@ -91,7 +76,7 @@ export default function ChangePlanPage() {
       {/* Plans grid */}
       <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch'>
         {plansLoading ? (
-          [0,1,2].map((i) => (
+          [0,1,2].map(i => (
             <Card key={i} className='flex flex-col h-full'>
               <CardHeader className='space-y-2'>
                 <div className='h-4 w-24 bg-muted rounded animate-pulse' />
@@ -108,7 +93,7 @@ export default function ChangePlanPage() {
             </Card>
           ))
         ) : (
-          plans.map((plan) => {
+          plans.map(plan => {
             const price = billingCycle === 'monthly' ? plan.pricing.monthly.price_display : plan.pricing.yearly.price_display
             const isCurrentPlan = hasActiveSubscription && subscription ? plan.name.toLowerCase() === subscription.plan_name.toLowerCase() : false
             const isCurrentCycle = isCurrentPlan && billingCycle === subscription?.billing_cycle
@@ -158,7 +143,7 @@ export default function ChangePlanPage() {
           </DialogHeader>
           {/* Selected plan summary inside the dialog */}
           {(() => {
-            const selectedPlan = plans.find((p) => p.id === selectedPlanId)
+            const selectedPlan = plans.find(p => p.id === selectedPlanId)
             const selectedPrice = selectedPlan
               ? (billingCycle === 'monthly' ? selectedPlan.pricing.monthly.price_display : selectedPlan.pricing.yearly.price_display)
               : null
