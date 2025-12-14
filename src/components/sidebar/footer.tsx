@@ -9,7 +9,6 @@ import {
   LogOut,
 } from 'lucide-react'
 import { useActionState, useEffect } from 'react'
-
 import {
   Avatar,
   AvatarFallback,
@@ -118,7 +117,7 @@ export default function Footer() {
                 >
                   <button
                     type='submit'
-                    className='flex w-full items-center gap-2 px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
+                    className='flex w-full items-center gap-2 px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50'
                   >
                     <LogOut className={isPending ? 'animate-spin' : ''} />
                     {isPending ? 'Cerrando sesión...' : 'Log out'}

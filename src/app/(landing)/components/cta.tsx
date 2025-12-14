@@ -4,9 +4,9 @@ import { Check, ArrowRight } from 'lucide-react'
 
 export default function CTA() {
   return (
-    <section className='relative py-16 md:py-20 px-4 overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-foreground'>
+    <section className='relative py-16 md:py-20 px-4 overflow-hidden bg-linear-to-br from-primary via-primary to-primary/90 text-primary-foreground'>
       {/* Background decoration */}
-      <div className='absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent'></div>
+      <div className='absolute inset-0 bg-linear-to-r from-primary/20 to-transparent'></div>
       <div className='absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32'></div>
       <div className='absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24'></div>
       

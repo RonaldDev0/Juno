@@ -14,7 +14,7 @@ export default function Hero() {
           <div className='space-y-4'>
             <h1 className='text-5xl md:text-7xl font-bold tracking-tight text-foreground leading-tight'>
               Automate
-              <span className='bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent block'>Everything</span>
+              <span className='bg-linear-to-r from-primary to-primary/80 bg-clip-text text-transparent block'>Everything</span>
             </h1>
             <p className='text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed'>
               The complete workflow automation platform for modern enterprises.

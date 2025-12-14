@@ -42,8 +42,8 @@ export default function Pricing() {
               <Skeleton className='h-4 w-32 mx-auto mb-4' />
               <Skeleton className='h-12 w-20 mx-auto' />
             </CardHeader>
-            <CardContent className='space-y-4 flex flex-col flex-grow'>
-              <div className='space-y-3 flex-grow'>
+            <CardContent className='space-y-4 flex flex-col grow'>
+              <div className='space-y-3 grow'>
                 {[1, 2, 3, 4, 5].map(j => (
                   <div key={j} className='flex items-center gap-3'>
                     <Skeleton className='h-5 w-5 rounded-full' />
@@ -161,11 +161,11 @@ export default function Pricing() {
                 ) : null}
               </CardHeader>
 
-              <CardContent className='space-y-4 flex flex-col flex-grow'>
-                <ul className='space-y-3 flex-grow'>
+              <CardContent className='space-y-4 flex flex-col grow'>
+                <ul className='space-y-3 grow'>
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className='flex items-center gap-3'>
-                      <Check className='h-5 w-5 text-green-500 flex-shrink-0' />
+                      <Check className='h-5 w-5 text-green-500 shrink-0' />
                       <span className='text-sm'>{feature}</span>
                     </li>
                   ))}

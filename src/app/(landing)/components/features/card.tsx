@@ -26,7 +26,7 @@ export default function FeatureCard({ icon: Icon, title, description, features }
         <ul className='space-y-3 text-sm text-muted-foreground'>
           {features.map((feature, index) => (
             <li key={index} className='flex items-start gap-3'>
-              <Check className='h-5 w-5 text-green-500 flex-shrink-0 mt-0.5' />
+              <Check className='h-5 w-5 text-green-500 shrink-0 mt-0.5' />
               <span>
                 <strong className='text-foreground'>{feature.split(' - ')[0]}</strong> - {feature.split(' - ')[1]}
               </span>

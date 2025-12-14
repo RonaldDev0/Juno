@@ -17,7 +17,7 @@ export default async function HomePage() {
         <div className='bg-muted/50 aspect-video rounded-xl' />
         <div className='bg-muted/50 aspect-video rounded-xl' />
       </div>
-      <div className='bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min flex justify-center items-center'>
+      <div className='bg-muted/50 min-h-screen flex-1 rounded-xl md:min-h-min flex justify-center items-center'>
         <p>Hello {data.user.user_metadata.username} 🎉</p>
       </div>
     </div>

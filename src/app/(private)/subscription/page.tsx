@@ -20,7 +20,7 @@ export default function ChangePlanPage() {
     isProcessing,
     getDialogProps,
     subscription,
-    hasActiveSubscription,
+    hasActiveSubscription
   } = useChangePlan()
 
   // Do not auto-open the dialog on first render; open only on user action

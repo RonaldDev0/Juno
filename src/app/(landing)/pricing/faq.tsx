@@ -36,7 +36,7 @@ export default function Faq() {
           <Card key={index} className='hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 shadow-md'>
             <CardContent className='p-8'>
               <div className='flex items-start gap-4'>
-                <div className='w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1'>
+                <div className='w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0 mt-1'>
                   <faq.icon className='h-6 w-6 text-primary' />
                 </div>
                 <div className='flex-1'>

@@ -59,7 +59,7 @@ export function Navbar() {
 
   return (
     <>
-      <nav className='fixed top-0 left-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60'>
+      <nav className='fixed top-0 left-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/60'>
         <div className='container mx-auto flex h-16 items-center justify-between px-4 lg:px-6 relative max-w-7xl'>
           {/* Logo - Left */}
           <Link href='/' className='text-3xl font-bold group hover:scale-105 transition-transform duration-200'>
