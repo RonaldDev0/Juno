@@ -111,8 +111,8 @@ export default function Pricing() {
               >
                 Yearly
               </Button>
-              <div className='absolute -top-3 -right-3 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-bold z-20'>
-                17% off
+              <div className='absolute -top-3 -right-12 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-bold z-20'>
+                2 months free
               </div>
             </div>
           </div>
